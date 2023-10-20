@@ -60,7 +60,8 @@ get_system_architecture() {
 }
 
 get_file_extension() {
-  local extension platform="$1"
+  local extension
+  platform="$1"
   case $platform in
   darwin) platform="tar.gz" ;;
   linux) platform="tar.gz" ;;
