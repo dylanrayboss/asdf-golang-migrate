@@ -37,37 +37,37 @@ list_all_versions() {
 }
 
 get_platform() {
-  local platform
-  platform=$(uname)
-  case $platform in
-  Darwin) platform="darwin" ;;
-  Linux) platform="linux" ;;
-  Windows) platform="windows" ;;
-  esac
-  echo "$platform"
+	local platform
+	platform=$(uname)
+	case $platform in
+	Darwin) platform="darwin" ;;
+	Linux) platform="linux" ;;
+	Windows) platform="windows" ;;
+	esac
+	echo "$platform"
 }
 
 get_system_architecture() {
-  local architecture
-  architecture=$(uname -m)
-  case $architecture in
-  armv7l) architecture="armv7" ;;
-  aarch64) architecture="arm64" ;;
-  i386) architecture="386" ;;
-  x86_64) architecture="amd64" ;;
-  esac
-  echo "$architecture"
+	local architecture
+	architecture=$(uname -m)
+	case $architecture in
+	armv7l) architecture="armv7" ;;
+	aarch64) architecture="arm64" ;;
+	i386) architecture="386" ;;
+	x86_64) architecture="amd64" ;;
+	esac
+	echo "$architecture"
 }
 
 get_file_extension() {
-  local extension
-  platform="$1"
-  case $platform in
-  darwin) extension="tar.gz" ;;
-  linux) extension="tar.gz" ;;
-  windows) extension="zip" ;;
-  esac
-  echo "$extension"
+	local extension
+	platform="$1"
+	case $platform in
+	darwin) extension="tar.gz" ;;
+	linux) extension="tar.gz" ;;
+	windows) extension="zip" ;;
+	esac
+	echo "$extension"
 }
 
 download_release() {
@@ -85,30 +85,30 @@ download_release() {
 }
 
 install_version() {
-  local install_type="$1"
-  local version="$2"
-  local install_path="$3/bin"
+	local install_type="$1"
+	local version="$2"
+	local install_path="$3/bin"
 
-  if [ "$install_type" != "version" ]; then
-    fail "asdf-$TOOL_NAME supports release installs only"
-  fi
+	if [ "$install_type" != "version" ]; then
+		fail "asdf-$TOOL_NAME supports release installs only"
+	fi
 
-  (
-    local tool_cmd
-    tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-    mkdir -p "$install_path"
-    cp -r "$ASDF_DOWNLOAD_PATH/$tool_cmd" "$install_path"
-    if [ -f "$install_path/$tool_cmd" ]; then
-      echo "* Installed $TOOL_NAME $version to $install_path"
-    else
-      fail "Could not install $TOOL_NAME $version to $install_path"
-    fi
-    chmod +x "$install_path/$tool_cmd"
-    test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
+	(
+		local tool_cmd
+		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+		mkdir -p "$install_path"
+		cp -r "$ASDF_DOWNLOAD_PATH/$tool_cmd" "$install_path"
+		if [ -f "$install_path/$tool_cmd" ]; then
+			echo "* Installed $TOOL_NAME $version to $install_path"
+		else
+			fail "Could not install $TOOL_NAME $version to $install_path"
+		fi
+		chmod +x "$install_path/$tool_cmd"
+		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
-    echo "$TOOL_NAME $version installation was successful!"
-  ) || (
-    rm -rf "$install_path"
-    fail "An error occurred while installing $TOOL_NAME $version."
-  )
+		echo "$TOOL_NAME $version installation was successful!"
+	) || (
+		rm -rf "$install_path"
+		fail "An error occurred while installing $TOOL_NAME $version."
+	)
 }
