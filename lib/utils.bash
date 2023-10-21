@@ -80,7 +80,7 @@ download_release() {
 
 	url="$GH_REPO/releases/download/v${version}/migrate.${platform}-${architecture}.${extension}"
 
-	echo "* Downloading $TOOL_NAME release $version..."
+	echo "* Downloading $TOOL_NAME release $version from $url"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
