@@ -63,9 +63,9 @@ get_file_extension() {
   local extension
   platform="$1"
   case $platform in
-  darwin) platform="tar.gz" ;;
-  linux) platform="tar.gz" ;;
-  windows) platform="zip" ;;
+  darwin) extension="tar.gz" ;;
+  linux) extension="tar.gz" ;;
+  windows) extension="zip" ;;
   esac
   echo "$extension"
 }
