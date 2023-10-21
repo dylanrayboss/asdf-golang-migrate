@@ -36,51 +36,14 @@ list_all_versions() {
 	list_github_tags
 }
 
-get_platform() {
-  local platform
-  platform=$(uname)
-  case $platform in
-  Darwin) platform="darwin" ;;
-  Linux) platform="linux" ;;
-  Windows) platform="windows" ;;
-  esac
-  echo "$platform"
-}
-
-get_system_architecture() {
-  local architecture
-  architecture=$(uname -m)
-  case $architecture in
-  armv7l) architecture="armv7" ;;
-  aarch64) architecture="arm64" ;;
-  i386) architecture="386" ;;
-  x86_64) architecture="amd64" ;;
-  esac
-  echo "$architecture"
-}
-
-get_file_extension() {
-  local extension
-  platform="$1"
-  case $platform in
-  darwin) extension="tar.gz" ;;
-  linux) extension="tar.gz" ;;
-  windows) extension="zip" ;;
-  esac
-  echo "$extension"
-}
-
 download_release() {
-	local version platform architecture extension filename url
+	local version filename url
 	version="$1"
-	platform="$(get_platform)"
-	architecture="$(get_system_architecture)"
-	extension="$(get_file_extension "$platform")"
 	filename="$2"
 
-	url="$GH_REPO/releases/download/v${version}/migrate.${platform}-${architecture}.${extension}"
+	url="$GH_REPO/archive/v${version}.tar.gz"
 
-	echo "* Downloading $TOOL_NAME release $version from $url"
+	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
