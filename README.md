@@ -43,7 +43,7 @@ asdf install golang-migrate latest
 asdf global golang-migrate latest
 
 # Now golang-migrate commands are available
-migrate --version
+migrate -version
 ```
 
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
