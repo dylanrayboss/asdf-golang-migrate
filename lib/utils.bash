@@ -85,26 +85,30 @@ download_release() {
 }
 
 install_version() {
-	local install_type="$1"
-	local version="$2"
-	local install_path="${3%/bin}/bin"
+  local install_type="$1"
+  local version="$2"
+  local install_path="$3/bin"
 
-	if [ "$install_type" != "version" ]; then
-		fail "asdf-$TOOL_NAME supports release installs only"
-	fi
+  if [ "$install_type" != "version" ]; then
+    fail "asdf-$TOOL_NAME supports release installs only"
+  fi
 
-	(
-		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+  (
+    local tool_cmd
+    tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+    mkdir -p "$install_path"
+    cp -r "$ASDF_DOWNLOAD_PATH/$tool_cmd" "$install_path"
+    if [ -f "$install_path/$tool_cmd" ]; then
+      echo "* Installed $TOOL_NAME $version to $install_path"
+    else
+      fail "Could not install $TOOL_NAME $version to $install_path"
+    fi
+    chmod +x "$install_path/$tool_cmd"
+    test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
-		# TODO: Assert golang-migrate executable exists.
-		local tool_cmd
-		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
-
-		echo "$TOOL_NAME $version installation was successful!"
-	) || (
-		rm -rf "$install_path"
-		fail "An error occurred while installing $TOOL_NAME $version."
-	)
+    echo "$TOOL_NAME $version installation was successful!"
+  ) || (
+    rm -rf "$install_path"
+    fail "An error occurred while installing $TOOL_NAME $version."
+  )
 }
